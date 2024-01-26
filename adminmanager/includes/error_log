@@ -1,0 +1,18 @@
+[01-Sep-2023 11:27:05 Africa/Lagos] PHP Warning:  Undefined variable $conn in /home/distress/public_html/adminmanager/includes/action.php on line 39
+[01-Sep-2023 11:27:05 Africa/Lagos] PHP Fatal error:  Uncaught TypeError: mysqli_query(): Argument #1 ($mysql) must be of type mysqli, null given in /home/distress/public_html/adminmanager/includes/action.php:39
+Stack trace:
+#0 /home/distress/public_html/adminmanager/includes/action.php(39): mysqli_query(NULL, 'UPDATE properti...')
+#1 {main}
+  thrown in /home/distress/public_html/adminmanager/includes/action.php on line 39
+[06-Sep-2023 14:53:29 Africa/Lagos] PHP Warning:  Undefined variable $conn in /home/distress/public_html/adminmanager/includes/action.php on line 39
+[06-Sep-2023 14:53:29 Africa/Lagos] PHP Fatal error:  Uncaught TypeError: mysqli_query(): Argument #1 ($mysql) must be of type mysqli, null given in /home/distress/public_html/adminmanager/includes/action.php:39
+Stack trace:
+#0 /home/distress/public_html/adminmanager/includes/action.php(39): mysqli_query(NULL, 'UPDATE properti...')
+#1 {main}
+  thrown in /home/distress/public_html/adminmanager/includes/action.php on line 39
+[06-Sep-2023 14:53:32 Africa/Lagos] PHP Warning:  Undefined variable $conn in /home/distress/public_html/adminmanager/includes/action.php on line 39
+[06-Sep-2023 14:53:32 Africa/Lagos] PHP Fatal error:  Uncaught TypeError: mysqli_query(): Argument #1 ($mysql) must be of type mysqli, null given in /home/distress/public_html/adminmanager/includes/action.php:39
+Stack trace:
+#0 /home/distress/public_html/adminmanager/includes/action.php(39): mysqli_query(NULL, 'UPDATE properti...')
+#1 {main}
+  thrown in /home/distress/public_html/adminmanager/includes/action.php on line 39
