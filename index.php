@@ -375,11 +375,12 @@ if (isset($_SESSION['useremail'])) {
                                                 <?= $info['propertytitle'] ?>
                                             </h6>
                                         </div>
-                                        <div class="buy-btn pull-right"><a
-                                                href="property-details.php?propertyCategory=<?= $info['propertyCategory'] ?>&id=<?= $info['id'] ?>">
-                                                <?= $info['symbol'] . $info['propertyprice'] ?>
-                                            </a>
-                                        </div>
+                                        <div class="buy-btn pull-right d-flex jusify-content-between">
+                                                        <span class="pr-1" style="font-size: 13px;">Cryptocurrency accepted</span>
+                                                        <a style="font-size: 10px;" href="property-details.php?propertyCategory=<?= $info['propertyCategory'] ?>&id=<?= $info['id'] ?>">
+                                                            <?= $info['symbol'] . $info['propertyprice'] ?>
+                                                        </a>
+                                                    </div>
                                     </div>
 
                                     <div class="title-text">

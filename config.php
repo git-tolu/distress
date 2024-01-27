@@ -1,9 +1,12 @@
 <?php
 class Database {
 
-        private $duser="distress_portal";
+        private $duser="root";
         private $dsn="mysql:host=localhost; dbname=distress_mainportal";
-        private $pass="3030@Pass.com^^%%";
+        private $pass="";
+        // private $duser="distress_portal";
+        // private $dsn="mysql:host=localhost; dbname=distress_mainportal";
+        // private $pass="3030@Pass.com^^%%";
 
         public $conn;
 

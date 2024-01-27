@@ -134,7 +134,6 @@ class Dbc extends Database
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([]);
         return true;
-
     }
 
     public function UploadProps($user_id, $propertyid, $propertytitle, $propertyprice, $area_location, $address, $city, $state, $longtitude, $langtitude, $detailedinfo, $featuredimage, $galleryimage, $status, $propertyCategory, $bedrooms, $bathroom, $toilets, $propsize, $parkingspace, $landsize, $titleproperty, $typeproperty, $landcategory, $youtubelink, $marketstatus, $symbol, $agent_id, $distresscat, $autocat, $estatename, $refno, $lastupdate, $pricewithoutcomma)
@@ -195,10 +194,19 @@ class Dbc extends Database
 
     public function SelectAllApropertiesSearch($search, $startIndex, $itemsPerPage)
     {
-        $sql = "SELECT * FROM properties WHERE propertytitle LIKE '%$search%' OR address LIKE '%$search%' OR city  LIKE '%$search%' OR state  LIKE '%$search%' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+        $sql = "SELECT * FROM properties WHERE propertytitle LIKE '%$search%' OR address LIKE '%$search%' OR city  LIKE '%$search%' OR state  LIKE '%$search%' OR detailedinfo  LIKE '%$search%'  OR propertyCategory  LIKE '%$search%'  OR propertyCategory  LIKE '%$search%' OR refno LIKE '%$search%' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $row;
+    }
+    public function SelectAllApropertiesSearchNO($search, $startIndex, $itemsPerPage)
+    {
+        $sql = "SELECT * FROM properties WHERE propertytitle LIKE '%$search%' OR address LIKE '%$search%' OR city  LIKE '%$search%' OR state  LIKE '%$search%' OR detailedinfo  LIKE '%$search%'  OR propertyCategory  LIKE '%$search%'  OR propertyCategory  LIKE '%$search%' OR refno LIKE '%$search%' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        
+        $row = $stmt->rowCount();
         return $row;
     }
 
@@ -329,18 +337,87 @@ class Dbc extends Database
         $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $row;
     }
-    public function SelectAllApropertiesWhereNoSessAD( $state, $propertyCategory, $minprice, $maxprice,  $keywords,  $itemsPerPage, $startIndex,$sqrt)
+    public function SelectAllApropertiesWhereNoSessAD($state, $propertyCategory, $proptype, $minprice, $maxprice,  $keywords,  $itemsPerPage, $startIndex, $sqrt)
     {
-        $sql = "SELECT * FROM properties WHERE  (propertyCategory='$propertyCategory' OR landcategory='$propertyCategory' OR typeproperty='$propertyCategory')  AND (state='$state' OR address LIKE '%$state%'  OR city='$state' AND propertytitle LIKE '%$keywords%'  OR detailedinfo LIKE '%$keywords%' OR  landsize='$sqrt' AND pricewithoutcomma BETWEEN '$minprice' AND '$maxprice') AND status!='pending'ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+        // $sql = "SELECT * FROM properties WHERE  (propertyCategory='$propertyCategory' OR landcategory='$propertyCategory' OR typeproperty='$propertyCategory')  AND (state='$state' OR address LIKE '%$state%'  OR city='$state') AND (propertytitle LIKE '%$keywords%'  OR detailedinfo LIKE '%$keywords%') OR  (landsize='$sqrt') AND (pricewithoutcomma BETWEEN '$minprice' AND '$maxprice') AND status!='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+        
+        // $sql = "SELECT *
+        // FROM properties 
+        // WHERE
+        //     (state LIKE CONCAT('%', $state,'%') OR address LIKE CONCAT('%', $state,'%') OR city LIKE CONCAT('%', $state,'%') OR $state IS NULL)
+        //     AND
+        //     (propertyCategory =  $propertyCategory OR  $propertyCategory IS NULL)
+        //     AND
+        //     (typeproperty = $proptype OR landsize = $sqrt OR $sqrt,$proptype IS NULL)
+        //     AND
+        //     (propertytitle LIKE CONCAT('%', $keywords,'%') OR detailedinfo LIKE CONCAT('%', $keywords,'%') OR $keywords IS NULL)
+        //     AND
+        //     (pricewithoutcomma BETWEEN $minprice AND $maxprice OR $minprice,$maxprice IS NULL)
+        //     AND
+        //     status != 'pending'
+        // ORDER BY id DESC 
+        // LIMIT $startIndex, $itemsPerPage ";
+        
+        if (!empty($state) && empty($propertyCategory  && $proptype && ($minprice && $maxprice) && $keywords && $sqrt) ) {
+            # code...
+            $sql = "SELECT * FROM properties WHERE  (state LIKE '%$state%' OR address LIKE '%$state%'  OR city LIKE '%$state%')  AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+        } elseif (!empty($propertyCategory) && empty($state  && $proptype && ($minprice && $maxprice) && $keywords && $sqrt)) {
+            $sql = "SELECT * FROM properties WHERE  propertyCategory LIKE '%$propertyCategory%'  AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+            # code...
+        }  elseif (!empty($proptype) && empty($state  && $propertyCategory && ($minprice && $maxprice) && $keywords && $sqrt)) {
+            $sql = "SELECT * FROM properties WHERE  typeproperty LIKE '%$proptype%'  AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+            # code...
+        }  elseif (!empty($minprice && $maxprice) && empty($state  && $propertyCategory && ($proptype) && $keywords && $sqrt)) {
+            $sql = "SELECT * FROM properties WHERE  (pricewithoutcomma BETWEEN '$minprice' AND '$maxprice')  AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+            # code...
+        }  elseif (!empty($keywords) && empty($state  && $propertyCategory && $proptype && ($minprice && $maxprice) && $sqrt)) {
+            $sql = "SELECT * FROM properties WHERE  (propertytitle LIKE '%$keywords%'  OR detailedinfo LIKE '%$keywords%')  AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+            # code...
+        }  elseif (!empty($sqrt) && empty($state  && $propertyCategory && $proptype && ($minprice && $maxprice))) {
+            $sql = "SELECT * FROM properties WHERE  landsize LIKE '%$sqrt%'  AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+            # code...
+        }  elseif (!empty($state  && $propertyCategory ) && empty( $proptype &&($minprice && $maxprice) && $sqrt)) {
+            $sql = "SELECT * FROM properties WHERE  (state LIKE '%$state%' OR address LIKE '%$state%'  OR city LIKE '%$state%') AND (propertyCategory LIKE '%$propertyCategory%')  AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+            # code...
+        }  elseif (!empty($state  && $propertyCategory &&  $proptype) && empty(($minprice && $maxprice) && $sqrt)) {
+            $sql = "SELECT * FROM properties WHERE  (state LIKE '%$state%' OR address LIKE '%$state%'  OR city LIKE '%$state%') AND (propertyCategory LIKE '%$propertyCategory%') AND (typeproperty LIKE '%$proptype%')  AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+            # code...
+        }   elseif (!empty($state  && $propertyCategory &&  $proptype && ($minprice && $maxprice)) && empty($sqrt)) {
+            $sql = "SELECT * FROM properties WHERE  (state LIKE '%$state%' OR address LIKE '%$state%'  OR city LIKE '%$state%') AND (propertyCategory LIKE '%$propertyCategory%') AND (typeproperty LIKE '%$proptype%')  AND (pricewithoutcomma BETWEEN '$minprice' AND '$maxprice')  AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+            # code...
+        }   elseif (!empty($propertyCategory &&  $proptype) && empty($state   && ($minprice && $maxprice) && $sqrt)) {
+            $sql = "SELECT * FROM properties WHERE  (propertyCategory LIKE '%$propertyCategory%') AND (typeproperty LIKE '%$proptype%')  AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+            # code...
+        }   elseif (!empty($propertyCategory &&  $proptype && ($minprice && $maxprice)) && empty($state    && $sqrt)) {
+            $sql = "SELECT * FROM properties WHERE  (propertyCategory LIKE '%$propertyCategory%') AND (typeproperty LIKE '%$proptype%')  AND (pricewithoutcomma BETWEEN '$minprice' AND '$maxprice')AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+            # code...
+        }   elseif (!empty($propertyCategory &&  $proptype && ($minprice && $maxprice)  && $sqrt) && empty($state   )) {
+            $sql = "SELECT * FROM properties WHERE  (propertyCategory LIKE '%$propertyCategory%') AND (typeproperty LIKE '%$proptype%')  AND (pricewithoutcomma BETWEEN '$minprice' AND '$maxprice') AND landsize='$sqrt' AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+            # code...
+        }    elseif (!empty($proptype && ($minprice && $maxprice)  ) && empty($state &&  $propertyCategory && $sqrt  )) {
+            $sql = "SELECT * FROM properties WHERE   (typeproperty LIKE '%$proptype%')  AND (pricewithoutcomma BETWEEN '$minprice' AND '$maxprice') AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+            # code...
+        }   elseif (!empty($proptype && ($minprice && $maxprice)  && $sqrt) && empty($state &&  $propertyCategory   )) {
+            $sql = "SELECT * FROM properties WHERE   (typeproperty LIKE '%$proptype%')  AND (pricewithoutcomma BETWEEN '$minprice' AND '$maxprice') AND (propertytitle LIKE '%$keywords%'  OR detailedinfo LIKE '%$keywords%') AND  landsize='$sqrt' AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+            # code...
+        }  elseif (!empty(($minprice && $maxprice)  && $sqrt) && empty($state &&  $propertyCategory &&$proptype   )) {
+            $sql = "SELECT * FROM properties WHERE (pricewithoutcomma BETWEEN '$minprice' AND '$maxprice')   landsize='$sqrt' AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+            # code...
+        }elseif (!empty($state  && $propertyCategory  && $proptype && ($minprice && $maxprice) && $sqrt)) {
+            $sql = "SELECT * FROM properties WHERE  (propertyCategory='$propertyCategory' OR typeproperty='$proptype')  AND (state='$state' OR address LIKE '%$state%'  OR city='$state' )AND (propertytitle LIKE '%$keywords%'  OR detailedinfo LIKE '%$keywords%') AND  landsize='$sqrt' AND (pricewithoutcomma BETWEEN '$minprice' AND '$maxprice')  AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+            # code...
+        }
+        
+        
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // return  var_dump($row);
         // return  var_dump($sql);
-
         return $row;
         // pricewithoutcomma >= '$minprice' AND pricewithoutcomma <= '$maxprice'
     }
-    public function SelectAllApropertiesWhereNoSessADCount( $state, $propertyCategory, $minprice, $maxprice,  $keywords,  $itemsPerPage, $startIndex,$sqrt)
+    public function SelectAllApropertiesWhereNoSessADCount($state, $propertyCategory, $minprice, $maxprice,  $keywords,  $itemsPerPage, $startIndex, $sqrt)
     {
         $sql = "SELECT * FROM properties WHERE  (propertyCategory='$propertyCategory' OR landcategory='$propertyCategory' OR typeproperty='$propertyCategory')  AND (state='$state' OR address LIKE '%$state%'  OR city='$state' AND propertytitle LIKE '%$keywords%'  OR detailedinfo LIKE '%$keywords%' OR  landsize='$sqrt' AND pricewithoutcomma BETWEEN '$minprice' AND '$maxprice') AND status!='pending'ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
         $stmt = $this->conn->prepare($sql);
@@ -401,8 +478,4 @@ class Dbc extends Database
         $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $row;
     }
-
-
-
-
 }

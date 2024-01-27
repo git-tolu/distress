@@ -1,7 +1,7 @@
 <?php
    $dbhost = 'localhost';
-   $dbuser = 'uptechng_distress';
-   $dbpass = '2023@Mypass';
-   $dbname = 'uptechng_distress';
+     $dbuser = 'distress_portal';
+   $dbpass = '3030@Pass.com^^%%';
+   $dbname = 'distress_mainportal';
    $conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 ?>
