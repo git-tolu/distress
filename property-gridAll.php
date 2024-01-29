@@ -560,7 +560,7 @@ if (isset($_SESSION['useremail'])) {
                                                 <div class="form-group">
                                                     <label>Location</label>
                                                     <div class="easy-autocomplete">
-                                                        <textarea data-prefix="" name="Location" placeholder="Enter a state, locality or area" data-results="all" style="height:36px;" type="text" class="form-control side-panel-search propertyLocation" autocomplete="off" id="eac-118" ></textarea>
+                                                        <textarea data-prefix="" name="Location" placeholder="Enter a state, locality or area" data-results="all" style="height:36px;" type="text" class="form-control side-panel-search propertyLocation" autocomplete="off" id="eac-118"></textarea>
 
                                                     </div>
                                                 </div>
@@ -570,8 +570,8 @@ if (isset($_SESSION['useremail'])) {
                                             <div class="col-md-12 ">
                                                 <div class="form-group">
                                                     <label>Type</label>
-                                                    <select class="form-control" name="propertyCategory" id="trigShow" >
-                                                    
+                                                    <select class="form-control" name="propertyCategory" id="trigShow">
+
                                                         <option value=" ">
                                                             ...
                                                         </option>
@@ -614,7 +614,7 @@ if (isset($_SESSION['useremail'])) {
                                             <div class="col-lg-12 col-md-12 col-sm-12 column show3">
                                                 <label>Property Type</label>
                                                 <div class="field-input">
-                                                    <select class="form-control" name="type">
+                                                    <select class="form-control" name="type1">
                                                         <option value="">
 
                                                         </option>
@@ -638,7 +638,7 @@ if (isset($_SESSION['useremail'])) {
                                             <div class="col-lg-12 col-md-12 col-sm-12 column show2">
                                                 <label>Property Type</label>
                                                 <div class="field-input">
-                                                    <select class="form-control" name="type">
+                                                    <select class="form-control" name="type2">
                                                         <option value="">
 
                                                         </option>
@@ -664,7 +664,7 @@ if (isset($_SESSION['useremail'])) {
                                             <div class="col-lg-12 col-md-12 col-sm-12 column show1">
                                                 <label>Land Category</label>
                                                 <div class="field-input">
-                                                    <select class="form-control" name="type" id="">
+                                                    <select class="form-control" name="type3" id="">
                                                         <option value="">
 
                                                         </option>
@@ -680,7 +680,7 @@ if (isset($_SESSION['useremail'])) {
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Min price</label>
-                                                    <select name="minprice"  id="minprice" class="form-control">
+                                                    <select name="minprice" id="minprice" class="form-control">
                                                         <option value="0" selected="selected">No Min</option>
                                                         <option value="250000"> 250,000</option>
                                                         <option value="500000"> 500,000</option>
@@ -719,7 +719,7 @@ if (isset($_SESSION['useremail'])) {
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Max price</label>
-                                                    <select name="maxprice"  id="maxprice" class="form-control">
+                                                    <select name="maxprice" id="maxprice" class="form-control">
                                                         <option value="0" selected="selected">No Max</option>
                                                         <option value="250000"> 250,000</option>
                                                         <option value="500000"> 500,000</option>
@@ -760,7 +760,7 @@ if (isset($_SESSION['useremail'])) {
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label>Title</label>
-                                                    <input name="keywords" id="keywords"  class="form-control" placeholder="4bedromm duplex etc" value="" autocomplete="off">
+                                                    <input name="keywords" id="keywords" class="form-control" placeholder="4bedromm duplex etc" value="" autocomplete="off">
                                                 </div>
                                             </div>
                                         </div>
@@ -839,7 +839,6 @@ if (isset($_SESSION['useremail'])) {
                                         // Query to fetch the items from the database
                                         // Replace this with your own query to fetch the items
                                         $Location = $_POST['Location'];
-                                        $typeproperty = $_POST['type'];
                                         $minprice = $_POST['minprice'];
                                         $maxprice = $_POST['maxprice'];
                                         $keywords = $_POST['keywords'];
@@ -847,10 +846,24 @@ if (isset($_SESSION['useremail'])) {
                                         // $fetch = $dbs->SelectAllApropertiesWhereNoSessAD($Location, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
 
                                         $prop = $_POST['propertyCategory'];
-                                        $land = $typeproperty;
-                                    //   echo $prop;
+                                        // $land = $typeproperty;
+                                        if ($_POST['propertyCategory'] == 'Distress Properties') :
+
+                                            // var_dump($fetch);
+                                            $typeproperty = $_POST['type'];
+                                        elseif ($_POST['propertyCategory'] == 'Non Distress Properties') :
+                                            $typeproperty = $_POST['type1'];
+
+                                        elseif ($_POST['propertyCategory'] == 'Autos/Machinery') :
+                                            $typeproperty = $_POST['type2'];
+
+                                        elseif ($_POST['propertyCategory'] == 'Land') :
+                                            $typeproperty = $_POST['type3'];
+
+                                        endif;
+                                        echo $typeproperty;
                                         $fetch = $dbs->SelectAllApropertiesWhereNoSessAD($Location, $prop,  $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
-                                        
+
                                         // if (!isset($land)) {
                                         //     $land = '';
                                         //     # code...
@@ -859,7 +872,7 @@ if (isset($_SESSION['useremail'])) {
                                         //     $typeproperty = '';
                                         //     $fetch = $dbs->SelectAllApropertiesWhereNoSessAD($Location, $prop, $land, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
                                         // }
-                                        
+
                                         // echo var_dump($fetch);
                                         // $itemsQuery = "SELECT * FROM items LIMIT $startIndex, $itemsPerPage";
 

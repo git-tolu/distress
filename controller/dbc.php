@@ -343,7 +343,10 @@ class Dbc extends Database
 
 
    
-       if (!empty($state)  && !empty($propertyCategory) &&  !empty($proptype) && empty($minprice && $maxprice) && empty($sqrt) ) {
+        if (!empty($proptype) && !empty($propertyCategory)  && empty($state && $minprice && $maxprice && $keywords && $sqrt)) {
+            $sql = "SELECT * FROM properties WHERE  typeproperty LIKE '%$proptype%' AND propertyCategory LIKE '%$propertyCategory%'  AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
+            # code...
+        }elseif (!empty($state)  && !empty($propertyCategory) &&  !empty($proptype) && empty($minprice && $maxprice) && empty($sqrt) ) {
             $sql = "SELECT * FROM properties WHERE  (state LIKE '%$state%' OR address LIKE '%$state%'  OR city LIKE '%$state%') AND (propertyCategory LIKE '%$propertyCategory%') AND (typeproperty LIKE '%$proptype%')  AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
             # code...
         } elseif (!empty($state)  && !empty($propertyCategory) &&  empty($proptype) && !empty(($minprice && $maxprice)) && empty($sqrt)) {
@@ -400,10 +403,7 @@ class Dbc extends Database
         } elseif (!empty($proptype)  && empty($state  && $propertyCategory && $minprice && $maxprice && $keywords && $sqrt)) {
             $sql = "SELECT * FROM properties WHERE  typeproperty LIKE '%$proptype%' AND (propertyCategory LIKE '%$propertyCategory%')  AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
             # code...
-        }  elseif (!empty($proptype) && !empty($propertyCategory)  && empty($state && $minprice && $maxprice && $keywords && $sqrt)) {
-            $sql = "SELECT * FROM properties WHERE  typeproperty LIKE '%$proptype%' AND propertyCategory LIKE '%$propertyCategory%'  AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
-            # code...
-        } elseif (!empty($minprice && $maxprice) && empty($state  && $propertyCategory && $proptype && $keywords && $sqrt)) {
+        }  elseif (!empty($minprice && $maxprice) && empty($state  && $propertyCategory && $proptype && $keywords && $sqrt)) {
             $sql = "SELECT * FROM properties WHERE  (pricewithoutcomma BETWEEN '$minprice' AND '$maxprice') AND (propertyCategory LIKE '%$propertyCategory%')  AND status !='pending' ORDER BY id DESC LIMIT $startIndex, $itemsPerPage ";
             # code...
         } elseif (!empty($keywords) && empty($state  && $propertyCategory && $proptype && $minprice && $maxprice && $sqrt)) {
