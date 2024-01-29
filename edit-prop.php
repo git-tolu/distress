@@ -156,7 +156,7 @@ if (isset($_POST['propertytitle'])) {
     $longtitude = $dbusers->test_input($_POST['longtitude']);
     $langtitude = $dbusers->test_input($_POST['langtitude']);
     $detailedinfo = $dbusers->test_input($_POST['detailedinfo']);
-    $propertyCategory = $dbusers->test_input($_POST['propertyCategory']);
+    $propertyCategory = $dbusers->test_input($_POST['propertyCategory']).' ';
     $formType = $dbusers->test_input($_POST['formType']);
 
     if (!empty($_POST['bedrooms'])) {

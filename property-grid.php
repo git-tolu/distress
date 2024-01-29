@@ -1147,7 +1147,7 @@ if (isset($_SESSION['useremail'])) {
                             <div class="item-shorting clearfix">
                                 <div class="left-column pull-left">
                                     <?php
-                                    $count = $dbs->SelectAllApropertiesNoSessNoLimitCount($propertyCategory);
+                                    
                                     // Number of items per page
                                     $itemsPerPage = 9;
 
@@ -1159,12 +1159,37 @@ if (isset($_SESSION['useremail'])) {
 
                                     // Query to fetch the items from the database
                                     // Replace this with your own query to fetch the items
-                                    $fetch = $dbs->SelectAllApropertiesNoSessNoLimitPag($propertyCategory, $itemsPerPage, $startIndex);
-                                    $fetchCount = count($fetch);
+                                    if (isset($_POST['advquery'])) {
+                                        # code...
+                                        $Location = $_POST['Location'];
+                                        $typeproperty = $_POST['type'];
+                                        $minprice = $_POST['minprice'];
+                                        $maxprice = $_POST['maxprice'];
+                                        $keywords = $_POST['keywords'];
+                                        $prop = $_GET['propertyCategory'];
+                                        
+                                        if($prop == 'Land'){
+                                            $sqrt = $_POST['sqrt'];
+                                            
+                                            $fetch = $dbs->SelectAllApropertiesWhereNoSessADCount($Location, $prop, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
+                                        }else{
+
+                                            $sqrt = '';
+                                            $fetch = $dbs->SelectAllApropertiesWhereNoSessADCount($Location, $prop, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
+                                        }
+                                        $fetchCount = $fetch;
+                                        $count = '';
+                                    } else {
+                                        $fetch = $dbs->SelectAllApropertiesNoSessNoLimitPag($propertyCategory, $itemsPerPage, $startIndex);
+                                        # code...
+                                        $count = ' of ' . $dbs->SelectAllApropertiesNoSessNoLimitCount($propertyCategory)  . ' listings';
+                                        $fetchCount = count($fetch);
+                                    }
+                                    
                                     ?>
-                                    <h5>Search Reasults: <span>Showing
-                                            <?= $fetchCount ?> of
-                                            <?= $count ?> Listings
+                                    <h5>Search Results: <span>Showing
+                                            <?= $fetchCount ?> 
+                                            <?= $count ?> 
                                         </span></h5>
                                 </div>
                                 <div class="right-column pull-right clearfix">
@@ -1209,6 +1234,7 @@ if (isset($_SESSION['useremail'])) {
                                         $maxprice = $_POST['maxprice'];
                                         $keywords = $_POST['keywords'];
                                         $sqrt = '';
+                                        // var_dump($_POST);
                                         if ($_GET['propertyCategory'] == 'Distress Properties') :
                                             // $fetch = $dbs->AdvanceSearchqueryDis($Location, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex);
                                             $prop = $_GET['propertyCategory'];
@@ -1245,21 +1271,21 @@ if (isset($_SESSION['useremail'])) {
                                         // $totalItemsQuery = "SELECT COUNT(*) as total FROM items";
                                         $sqrt = '';
                                         if ($_GET['propertyCategory'] == 'Distress Properties') :
-                                            $totalItemsQuery = $dbs->SelectAllApropertiesWhereNoSessADCount($Location, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
+                                            $totalItemsQuery = $dbs->SelectAllApropertiesWhereNoSessADCount($Location, $_GET['propperty'], $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
                                         // $totalItemsQuery = $dbs->AdvanceSearchqueryNODis($Location, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex);
                                         elseif ($_GET['propertyCategory'] == 'Non Distress Properties') :
-                                            $totalItemsQuery = $dbs->SelectAllApropertiesWhereNoSessADCount($Location, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
+                                            $totalItemsQuery = $dbs->SelectAllApropertiesWhereNoSessADCount($Location, $_GET['propperty'], $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
 
                                         // $totalItemsQuery = $dbs->AdvanceSearchqueryNODis($Location, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex);
                                         elseif ($_GET['propertyCategory'] == 'Autos/Machinery') :
-                                            $totalItemsQuery = $dbs->SelectAllApropertiesWhereNoSessADCount($Location, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
+                                            $totalItemsQuery = $dbs->SelectAllApropertiesWhereNoSessADCount($Location, $_GET['propperty'], $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
 
-                                        // $totalItemsQuery = $dbs->AdvanceSearchqueryNODis($Location, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex);
-                                        elseif ($_GET['propertyCategory'] == 'Land') :
-                                            $totalItemsQuery = $dbs->SelectAllApropertiesWhereNoSessADCount($Location, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
+                                            // $totalItemsQuery = $dbs->AdvanceSearchqueryNODis($Location, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex);
+                                            elseif ($_GET['propertyCategory'] == 'Land') :
+                                                $sqrt = $_POST['sqrt'];
+                                            $totalItemsQuery = $dbs->SelectAllApropertiesWhereNoSessADCount($Location, $_GET['propperty'], $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
 
                                             // $totalItemsQuery = $dbs->AdvanceSearchqueryNOLand($Location, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
-                                            $sqrt = $_POST['sqrt'];
                                         endif;
                                         // $totalItemsQuery = $dbs->AdvanceSearchqueryNO($Location, $propertyCategory, $landcategory, $typeproperty, $bedrooms, $bathroom, $toilets, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $ref); 
                                         $totalItemsResult = $totalItemsQuery; // result of executing the query

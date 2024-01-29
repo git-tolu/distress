@@ -571,8 +571,9 @@ if (isset($_SESSION['useremail'])) {
                                                 <div class="form-group">
                                                     <label>Type</label>
                                                     <select class="form-control" name="propertyCategory" id="trigShow" >
-                                                        <option value="<?= $propertyCategory ?>">
-                                                            <?= $propertyCategory ?>
+                                                    
+                                                        <option value=" ">
+                                                            ...
                                                         </option>
                                                         <option value="Distress Properties" class="text-capitalize">
                                                             Distress Property
@@ -798,7 +799,7 @@ if (isset($_SESSION['useremail'])) {
                                     $fetch = $dbs->SelectAllApropertiesNoSessNoLimitPag($propertyCategory, $itemsPerPage, $startIndex);
                                     $fetchCount = count($fetch);
                                     ?>
-                                    <h5>Search Reasults: <span>Showing
+                                    <h5>Search Results: <span>Showing
                                             <?= $fetchCount ?> of
                                             <?= $count ?> Listings
                                         </span></h5>
@@ -844,9 +845,12 @@ if (isset($_SESSION['useremail'])) {
                                         $keywords = $_POST['keywords'];
                                         $sqrt = '';
                                         // $fetch = $dbs->SelectAllApropertiesWhereNoSessAD($Location, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
+
                                         $prop = $_POST['propertyCategory'];
                                         $land = $typeproperty;
+                                    //   echo $prop;
                                         $fetch = $dbs->SelectAllApropertiesWhereNoSessAD($Location, $prop,  $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
+                                        
                                         // if (!isset($land)) {
                                         //     $land = '';
                                         //     # code...
@@ -867,7 +871,7 @@ if (isset($_SESSION['useremail'])) {
                                         // Replace this with your own query to get the total number of items
                                         // $totalItemsQuery = "SELECT COUNT(*) as total FROM items";
                                         $sqrt = '';
-                                        $totalItemsQuery = $dbs->SelectAllApropertiesWhereNoSessADCount($Location, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
+                                        $totalItemsQuery = $dbs->SelectAllApropertiesWhereNoSessADCount($Location, $prop, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
 
                                         //$totalItemsQuery = $dbs->AdvanceSearchqueryNO($Location, $propertyCategory, $landcategory, $typeproperty, $bedrooms, $bathroom, $toilets, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $ref);
                                         $totalItemsResult = $totalItemsQuery; // result of executing the query
