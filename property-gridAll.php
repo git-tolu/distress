@@ -784,7 +784,12 @@ if (isset($_SESSION['useremail'])) {
                             <div class="item-shorting clearfix">
                                 <div class="left-column pull-left">
                                     <?php
-                                    $count = $dbs->SelectAllApropertiesNoSessNoLimitCount($propertyCategory);
+
+                                    
+                                        // $propertyCategory = $_POST['propertyCategory'];
+                                        // $count = $dbs->SelectAllApropertiesNoSessNoLimitCount($propertyCategory);
+                                   
+                                    
                                     // Number of items per page
                                     $itemsPerPage = 9;
 
@@ -796,12 +801,44 @@ if (isset($_SESSION['useremail'])) {
 
                                     // Query to fetch the items from the database
                                     // Replace this with your own query to fetch the items
-                                    $fetch = $dbs->SelectAllApropertiesNoSessNoLimitPag($propertyCategory, $itemsPerPage, $startIndex);
-                                    $fetchCount = count($fetch);
+                                    if (isset($_POST['advquery'])) {
+                                        # code...
+                                        $Location = $_POST['Location'];
+                                        $typeproperty = $_POST['type'];
+                                        $minprice = $_POST['minprice'];
+                                        $maxprice = $_POST['maxprice'];
+                                        $keywords = $_POST['keywords'];
+                                        $prop = $_POST['propertyCategory'];
+                                        
+                                        if($prop == 'Land'){
+                                            $sqrt = $_POST['sqrt'];
+                                            
+                                            $fetch = $dbs->SelectAllApropertiesWhereNoSessADCount($Location, $prop, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
+                                        }else{
+
+                                            $sqrt = '';
+                                            $fetch = $dbs->SelectAllApropertiesWhereNoSessADCount($Location, $prop, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
+                                        }
+                                        $fetchCount = $fetch;
+                                        $count = '';
+                                    }elseif(isset($_GET['search'])){
+                                        $search = $_GET['search'];
+                                        $fetch = $dbs->SelectAllApropertiesSearchNOCount($search, $startIndex, $itemsPerPage);
+                                        $fetchCount = count($fetch);
+                                        
+                                    } else {
+                                        $fetch = $dbs->SelectAllpropertiesNoLimit($startIndex, $itemsPerPage);
+                                        # code...
+                                        $count = ' of ' . $dbs->SelectAllApropertiesNoSessNoLimitPagCountAll()  . ' listings';
+                                        $fetchCount = count($fetch);
+                                    }
+                                    
+                                    // $fetch = $dbs->SelectAllApropertiesNoSessNoLimitPag($propertyCategory, $itemsPerPage, $startIndex);
+                                    // $fetchCount = count($fetch);
                                     ?>
                                     <h5>Search Results: <span>Showing
-                                            <?= $fetchCount ?> of
-                                            <?= $count ?> Listings
+                                            <?= $fetchCount ?> 
+                                            <?php $count ?> 
                                         </span></h5>
                                 </div>
                                 <div class="right-column pull-right clearfix">

@@ -258,7 +258,7 @@ if (isset($_SESSION['useremail'])) {
                                                 <div class="form-group">
                                                     <div class="field-input">
                                                         <select class="form-control" name="propertyCategory" required>
-                                                            <option data-display="Property Type">Property Type
+                                                            <option >Property Type
                                                             </option>
                                                             <?php
                                                             if ($propertyCategory == 'Distress Properties') :
@@ -324,7 +324,7 @@ if (isset($_SESSION['useremail'])) {
                                                 <div class="form-group">
                                                     <div class="select-box">
                                                         <select class="form-control" name="state" required>
-                                                            <option data-display="Select State">Select State
+                                                            <option >Select State
                                                             </option>
                                                             <option>ABUJA FCT</option>
                                                             <option>ABIA</option>
@@ -1178,17 +1178,24 @@ if (isset($_SESSION['useremail'])) {
                                             $fetch = $dbs->SelectAllApropertiesWhereNoSessADCount($Location, $prop, $typeproperty, $minprice, $maxprice, $keywords, $itemsPerPage, $startIndex, $sqrt);
                                         }
                                         $fetchCount = $fetch;
-                                        $count = '';
-                                    } else {
+                                        $count = $fetch;
+                                    } elseif(isset($_POST['searchBtn'])){
+                                        $propertyCategory = $_POST['propertyCategory'];
+                                        $state = $_POST['state'];
+                                        $fetch = $dbs->SelectAllApropertiesWhereNoSess($propertyCategory, $state);
+                                        $count = count($fetch);
+
+                                    }else {
                                         $fetch = $dbs->SelectAllApropertiesNoSessNoLimitPag($propertyCategory, $itemsPerPage, $startIndex);
                                         # code...
-                                        $count = ' of ' . $dbs->SelectAllApropertiesNoSessNoLimitCount($propertyCategory)  . ' listings';
+                                        $count = $dbs->SelectAllApropertiesNoSessNoLimitCount($propertyCategory)  . ' listings';
+                                        // $count = ' of ' . $dbs->SelectAllApropertiesNoSessNoLimitCount($propertyCategory)  . ' listings';
                                         $fetchCount = count($fetch);
                                     }
                                     
                                     ?>
                                     <h5>Search Results: <span>Showing
-                                            <?= $fetchCount ?> 
+                                            <?php $fetchCount ?> 
                                             <?= $count ?> 
                                         </span></h5>
                                 </div>

@@ -209,6 +209,16 @@ class Dbc extends Database
         $row = $stmt->rowCount();
         return $row;
     }
+    public function SelectAllApropertiesSearchNOCount($search, $startIndex, $itemsPerPage)
+    {
+        $sql = "SELECT * FROM properties WHERE propertytitle LIKE '%$search%' OR address LIKE '%$search%' OR city  LIKE '%$search%' OR state  LIKE '%$search%' OR detailedinfo  LIKE '%$search%'  OR propertyCategory  LIKE '%$search%'  OR propertyCategory  LIKE '%$search%' OR refno LIKE '%$search%'  ";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+
+        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // return var_dump($sql);
+        return $row;
+    }
 
     public function SelectAllApropertiesNoSess()
     {
@@ -261,11 +271,11 @@ class Dbc extends Database
     }
     public function SelectAllApropertiesNoSessNoLimitPagCountAll()
     {
-        $sql = "SELECT COUNT(*) as id FROM properties WHERE  status!='pending'";
+        $sql = "SELECT *  FROM properties WHERE  status!='pending'";
         // $sql = "SELECT * FROM properties LIMIT $startIndex, $itemsPerPage  ORDER BY id DESC  ";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $row = $stmt->rowCount();
         return $row;
     }
 
@@ -335,6 +345,7 @@ class Dbc extends Database
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // return var_dump($sql);
         return $row;
     }
     public function SelectAllApropertiesWhereNoSessAD($state, $propertyCategory, $proptype, $minprice, $maxprice,  $keywords,  $itemsPerPage, $startIndex, $sqrt)
