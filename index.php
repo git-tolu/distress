@@ -376,7 +376,7 @@ if (isset($_SESSION['useremail'])) {
                                             </h6>
                                         </div>
                                         <div class="buy-btn pull-right d-flex jusify-content-between">
-                                        <span class="mr-2 rounded text-dark p-1" style="font-size: 13px; background-color: #d9a46491;" >Cryptocurrency accepted</span>
+                                        <span class="mr-2 rounded text-white p-2" style="font-size: 10px; background-color: #004030;" >Cryptocurrency accepted</span>
                                                         <a style="font-size: 10px;" href="property-details.php?propertyCategory=<?= $info['propertyCategory'] ?>&id=<?= $info['id'] ?>">
                                                             <?= $info['symbol'] . $info['propertyprice'] ?>
                                                         </a>
